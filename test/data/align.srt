@@ -1,0 +1,35 @@
+1
+00:00:00,000 --> 00:00:05,000
+{\an9}Texto en la esquina superior derecha
+
+2
+00:00:05,100 --> 00:00:10,100
+{\an8}Texto en el centro superior
+
+3
+00:00:10,200 --> 00:00:15,200
+{\an7}Texto en la esquina superior izquierda
+
+4
+00:00:15,300 --> 00:00:20,300
+{\an6}Texto en la esquina derecha del medio
+
+5
+00:00:20,400 --> 00:00:25,400
+{\an5}Texto en el centro medio
+
+6
+00:00:25,500 --> 00:00:30,500
+{\an4}Texto en la esquina izquierda del medio
+
+7
+00:00:30,600 --> 00:00:35,600
+{\an3}Texto en la esquina inferior derecha
+
+8
+00:00:35,700 --> 00:00:40,700
+{\an2}Texto en el centro inferior
+
+9
+00:00:40,800 --> 00:00:45,800
+{\an1}Texto en la esquina inferior izquierda

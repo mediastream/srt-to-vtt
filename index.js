@@ -3,6 +3,20 @@ var pumpify = require('pumpify')
 var through = require('through2')
 var utf8 = require('to-utf-8')
 
+const align = ['start', 'center', 'end']
+
+function getAlignment (_, number) {
+  const n = Number(number) - 1
+  return [
+    ' ',
+    `align:${align[n % 3]}`,
+    `line:${100 - (Math.floor(n / 3) * 50)}%`,
+    `position:${Math.floor(n % 3) * 50}%`,
+    'size:100%',
+    '\r\n'
+  ].join(' ')
+}
+
 module.exports = function () {
   var buf = []
 
@@ -13,7 +27,7 @@ module.exports = function () {
       .replace(/\{([ibu])\}/g, '<$1>')
       .replace(/\{\/([ibu])\}/g, '</$1>')
       .replace(/(\d\d:\d\d:\d\d),(\d\d\d)/g, '$1.$2')
-      .replace(/\r\n\{\\an8\}/g, ' line:5%\r\n') +
+      .replace(/\r\n\{\\an(\d)\}/g, getAlignment) +
       '\r\n\r\n'
   }
 

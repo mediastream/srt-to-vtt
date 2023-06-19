@@ -27,7 +27,7 @@ tape('one entry with position an8', function (t) {
   convert.write('1\r\n00:00:35.490 --> 00:00:38.720\r\n{\\an8}<i><font color="#ffff00">hello\r\n\r\n')
   convert.end()
   convert.pipe(concat(function (data) {
-    t.same(data.toString(), 'WEBVTT FILE\r\n\r\n1\r\n00:00:35.490 --> 00:00:38.720 line:5%\r\n<i><font color="#ffff00">hello\r\n\r\n')
+    t.same(data.toString(), 'WEBVTT FILE\r\n\r\n1\r\n00:00:35.490 --> 00:00:38.720  align:center line:0% position:50% size:100% \r\n<i><font color="#ffff00">hello\r\n\r\n')
     t.end()
   }))
 })
@@ -56,6 +56,14 @@ tape('missing file ending CRLF', function (t) {
   convert.end()
   convert.pipe(concat(function (data) {
     t.same(data.toString(), 'WEBVTT FILE\r\n\r\n1\r\n00:00:10.500 --> 00:00:13.000\r\nthis is a test\r\n\r\n2\r\n00:00:14.500 --> 00:00:15.000\r\nthis is a test\r\n\r\n')
+    t.end()
+  }))
+})
+
+tape('alignments', function (t) {
+  var convert = srt2vtt()
+  fs.createReadStream('./test/data/align.srt').pipe(convert).pipe(concat(function (data) {
+    t.same(data.toString(), 'WEBVTT FILE\r\n\r\n1\r\n00:00:00.000 --> 00:00:05.000  align:end line:0% position:100% size:100% \r\nTexto en la esquina superior derecha\r\n\r\n2\r\n00:00:05.100 --> 00:00:10.100  align:center line:0% position:50% size:100% \r\nTexto en el centro superior\r\n\r\n3\r\n00:00:10.200 --> 00:00:15.200  align:start line:0% position:0% size:100% \r\nTexto en la esquina superior izquierda\r\n\r\n4\r\n00:00:15.300 --> 00:00:20.300  align:end line:50% position:100% size:100% \r\nTexto en la esquina derecha del medio\r\n\r\n5\r\n00:00:20.400 --> 00:00:25.400  align:center line:50% position:50% size:100% \r\nTexto en el centro medio\r\n\r\n6\r\n00:00:25.500 --> 00:00:30.500  align:start line:50% position:0% size:100% \r\nTexto en la esquina izquierda del medio\r\n\r\n7\r\n00:00:30.600 --> 00:00:35.600  align:end line:100% position:100% size:100% \r\nTexto en la esquina inferior derecha\r\n\r\n8\r\n00:00:35.700 --> 00:00:40.700  align:center line:100% position:50% size:100% \r\nTexto en el centro inferior\r\n\r\n9\r\n00:00:40.800 --> 00:00:45.800  align:start line:100% position:0% size:100% \r\nTexto en la esquina inferior izquierda\r\n\r\n')
     t.end()
   }))
 })
