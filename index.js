@@ -27,7 +27,7 @@ module.exports = function () {
       .replace(/\{([ibu])\}/g, '<$1>')
       .replace(/\{\/([ibu])\}/g, '</$1>')
       .replace(/(\d\d:\d\d:\d\d),(\d\d\d)/g, '$1.$2')
-      .replace(/\r\n\{\\an(\d)\}/g, getAlignment) +
+      .replace(/\{\\an(\d)\}/g, getAlignment) +
       '\r\n\r\n'
   }
 
