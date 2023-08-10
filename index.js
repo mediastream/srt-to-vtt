@@ -8,12 +8,11 @@ const align = ['start', 'center', 'end']
 function getAlignment (_, number) {
   const n = Number(number) - 1
   return [
-    ' ',
+    '',
     `align:${align[n % 3]}`,
     `line:${100 - (Math.floor(n / 3) * 50)}%`,
     `position:${Math.floor(n % 3) * 50}%`,
-    'size:100%',
-    '\r\n'
+    'size:100%'
   ].join(' ')
 }
 
@@ -21,6 +20,14 @@ module.exports = function () {
   var buf = []
 
   var convert = function () {
+    const anRegex = /{\\an(\d)}/;
+    const anxItem = buf.find(item => anRegex.test(item));
+
+    if (anxItem) {
+      const anNumber = anxItem.match(anRegex)[1];
+      buf[buf.indexOf(anxItem)] = anxItem.replace(anRegex, '');
+      buf[1] += `{\\an${anNumber}}`;
+    }
     return buf.join('\r\n')
       .replace(/\{\\([ibu])\}/g, '</$1>')
       .replace(/\{\\([ibu])1\}/g, '<$1>')
