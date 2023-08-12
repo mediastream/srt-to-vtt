@@ -20,21 +20,17 @@ module.exports = function () {
   var buf = []
 
   var convert = function () {
-    const anRegex = /{\\an(\d)}/;
-    const anxItem = buf.find(item => anRegex.test(item));
-
-    if (anxItem) {
-      const anNumber = anxItem.match(anRegex)[1];
-      buf[buf.indexOf(anxItem)] = anxItem.replace(anRegex, '');
-      buf[1] += `{\\an${anNumber}}`;
-    }
     return buf.join('\r\n')
       .replace(/\{\\([ibu])\}/g, '</$1>')
       .replace(/\{\\([ibu])1\}/g, '<$1>')
       .replace(/\{([ibu])\}/g, '<$1>')
       .replace(/\{\/([ibu])\}/g, '</$1>')
-      .replace(/(\d\d:\d\d:\d\d),(\d\d\d)/g, '$1.$2')
-      .replace(/\{\\an(\d)\}/g, getAlignment) +
+      .replace(/(\d\d:\d\d:\d\d),(\d{3})/g, '$1.$2')
+      // Handle position tags, independent of where they are placed in the cue
+      .replace(/(-->\s*\d\d:\d\d:\d\d\.\d{3})\s*\r\n(?=(?:.|\r\n)*\{\\an(\d)\})/, (_, m1, m2) => {
+        return `${m1}${getAlignment(null, m2)}\r\n`
+      })
+      .replace(/\{\\an(\d)\}/g, '') +
       '\r\n\r\n'
   }
 
