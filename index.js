@@ -8,12 +8,11 @@ const align = ['start', 'center', 'end']
 function getAlignment (_, number) {
   const n = Number(number) - 1
   return [
-    ' ',
+    '',
     `align:${align[n % 3]}`,
     `line:${100 - (Math.floor(n / 3) * 50)}%`,
     `position:${Math.floor(n % 3) * 50}%`,
-    'size:100%',
-    '\r\n'
+    'size:100%'
   ].join(' ')
 }
 
@@ -26,8 +25,12 @@ module.exports = function () {
       .replace(/\{\\([ibu])1\}/g, '<$1>')
       .replace(/\{([ibu])\}/g, '<$1>')
       .replace(/\{\/([ibu])\}/g, '</$1>')
-      .replace(/(\d\d:\d\d:\d\d),(\d\d\d)/g, '$1.$2')
-      .replace(/\r\n\{\\an(\d)\}/g, getAlignment) +
+      .replace(/(\d\d:\d\d:\d\d),(\d{3})/g, '$1.$2')
+      // Handle position tags, independent of where they are placed in the cue
+      .replace(/(-->\s*\d\d:\d\d:\d\d\.\d{3})\s*\r\n(?=(?:.|\r\n)*\{\\an(\d)\})/, (_, m1, m2) => {
+        return `${m1}${getAlignment(null, m2)}\r\n`
+      })
+      .replace(/\{\\an(\d)\}/g, '') +
       '\r\n\r\n'
   }
 
